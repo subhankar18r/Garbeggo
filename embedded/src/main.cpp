@@ -26,8 +26,10 @@ typedef struct Dustbin
 const int DISTANCE_THRESHOLD = 3;
 
 Dustbin dustbins[] = {
-    {33, 32, 26, 27, "Dustbin-1", false},
-};
+    {33, 32, 26, 27, "dustbin-1", false},
+    {33, 32, 26, 27, "dustbin-2", false},
+    {33, 32, 26, 27, "dustbin-3", false},
+    {33, 32, 26, 27, "dustbin-4", false}};
 
 int totalDustbins = sizeof(dustbins) / sizeof(dustbins[0]);
 
@@ -91,35 +93,53 @@ void setup()
   Serial.println("Connected to Firebase");
 }
 
+int getCountData(char *path)
+{
+  int count = 0;
+  if (Firebase.getJSON(firebaseData, path))
+  {
+    FirebaseJson &json = firebaseData.jsonObject();
+    FirebaseJsonData jsonData;
+    json.get(jsonData, "filled-count");
+    count = jsonData.intValue;
+  }
+  else
+  {
+    Serial.println("Failed to get data");
+    Serial.println(firebaseData.errorReason());
+  }
+  return count;
+}
+
 void loop()
 {
   int distances[totalDustbins];
-  Serial.println("Reading distances");
+  FirebaseJson json;
+
   for (int i = 0; i < totalDustbins; i++)
   {
+    json.clear();
     distances[i] = getDistance(dustbins[i].trig, dustbins[i].echo);
-    Serial.print("Distance of : ");
-    Serial.print(dustbins[i].id);
-    Serial.println(distances[i]);
+    char rtdbPath[20] = "/dustbins/";
+    strcat(rtdbPath, dustbins[i].id);
     delay(200);
 
     if (distances[i] <= DISTANCE_THRESHOLD)
     {
       digitalWrite(dustbins[i].ledR, HIGH);
       digitalWrite(dustbins[i].ledG, LOW);
-      dustbins[i].isFull = true;
+      json.add("status", "full");
+      int count = getCountData(rtdbPath);
+      json.add("filled-count", count + 1);
     }
     else
     {
       digitalWrite(dustbins[i].ledR, LOW);
       digitalWrite(dustbins[i].ledG, HIGH);
-      dustbins[i].isFull = false;
+      json.add("status", "empty");
     }
 
-    FirebaseJson json;
-
-    json.add(dustbins[i].id, dustbins[i].isFull);
-    if (Firebase.setJSON(firebaseData, "/Dustbins", json))
+    if (Firebase.setJSON(firebaseData, rtdbPath, json))
     {
       Serial.println("Data pushed successfully");
     }
