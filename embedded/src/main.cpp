@@ -111,17 +111,38 @@ int getCountData(char *path)
   return count;
 }
 
+char *getPreviousStatus(char *path)
+{
+  char *status;
+  if (Firebase.getJSON(firebaseData, path))
+  {
+    FirebaseJson &json = firebaseData.jsonObject();
+    FirebaseJsonData jsonData;
+    json.get(jsonData, "status");
+    status = strdup(jsonData.stringValue.c_str());
+  }
+  else
+  {
+    Serial.println("Failed to get data");
+    Serial.println(firebaseData.errorReason());
+  }
+  return status;
+}
+
 void loop()
 {
-  int distances[totalDustbins];
+  int distances[totalDustbins] = {3, 5, 3, 6};
   FirebaseJson json;
 
   for (int i = 0; i < totalDustbins; i++)
   {
     json.clear();
-    distances[i] = getDistance(dustbins[i].trig, dustbins[i].echo);
+    // distances[i] = getDistance(dustbins[i].trig, dustbins[i].echo);
     char rtdbPath[20] = "/dustbins/";
     strcat(rtdbPath, dustbins[i].id);
+    int filledCount = getCountData(rtdbPath);
+    char *previousStatus = getPreviousStatus(rtdbPath);
+    Serial.println(filledCount);
     delay(200);
 
     if (distances[i] <= DISTANCE_THRESHOLD)
@@ -129,14 +150,25 @@ void loop()
       digitalWrite(dustbins[i].ledR, HIGH);
       digitalWrite(dustbins[i].ledG, LOW);
       json.add("status", "full");
-      int count = getCountData(rtdbPath);
-      json.add("filled-count", count + 1);
+      if (previousStatus == NULL || strcmp(previousStatus, "") == 0)
+      {
+        json.add("filled-count", 1);
+      }
+      else if (strcmp(previousStatus, "empty") == 0)
+      {
+        json.add("filled-count", filledCount + 1);
+      }
+      else
+      {
+        json.add("filled-count", filledCount);
+      }
     }
     else
     {
       digitalWrite(dustbins[i].ledR, LOW);
       digitalWrite(dustbins[i].ledG, HIGH);
       json.add("status", "empty");
+      json.add("filled-count", filledCount);
     }
 
     if (Firebase.setJSON(firebaseData, rtdbPath, json))
@@ -147,6 +179,10 @@ void loop()
     {
       Serial.println("Failed to push data");
       Serial.println(firebaseData.errorReason());
+    }
+    if (previousStatus != NULL)
+    {
+      free(previousStatus);
     }
   }
 }
