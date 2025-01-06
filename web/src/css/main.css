@@ -1,63 +1,68 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-.hide{
-    display: none;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", serif;
 }
-.rotate-90{
-    rotate: 90deg;
+.hide {
+  display: none;
 }
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", serif;
+.rotate-90 {
+  rotate: 90deg;
 }
-header{
-    height: 84px;
-    background-color: #abdbe3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+header {
+  height: 84px;
+  background-color: #abdbe3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-header img{
-    height: 36px;
+header img {
+  height: 36px;
 }
-main{
-    height: calc(100vh - 84px);
-    padding: 0 10px;
-    display: grid;
-    grid-template-rows: auto 200px;
-    position: relative;
+main {
+  height: calc(100vh - 84px);
+  padding: 0 10px;
+  display: grid;
+  grid-template-rows: auto 200px;
+  position: relative;
 }
-.dustbin-container{
-    overflow: scroll;
+.dustbin-container {
+  overflow: scroll;
 }
-.dustbin-container h2{
-    margin-top: 10px;
+.dustbin-container h2 {
+  margin-top: 10px;
 }
-.dustbin-container ul{
-    list-style-type: disc;
-    padding-left: 18px;
+.dustbin-container ul {
+  list-style-type: disc;
+  padding-left: 18px;
 }
-.dustbin-container hr{
-    margin:20px 0;
+.dustbin-container hr {
+  margin: 20px 0;
 }
-.dustbin-container button{
-    height: 28px;
-    width: 55px;
-    background-color: #a3f8b5;
-    cursor: pointer;
+.dustbin-container button {
+  height: 28px;
+  width: 55px;
+  background-color: #a3f8b5;
+  cursor: pointer;
 }
-.dustbin-container button{
-    rotate: 0deg;
+.dustbin-container button {
+  rotate: 0deg;
 }
-.map{
-    margin: 10px;
-    overflow: hidden;
-    position: absolute;
-    bottom: 0;
-    box-shadow: 0 0 15px 0 black;
-    border-radius: 5px;
+.map {
+  width: 100%;
+  height: 200px;
+  margin: 10px auto;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  box-shadow: 0 0 15px 0 black;
+  border-radius: 5px;
+  background-color: #fff;
 }
-.map img{
-width: 100%;
+.map svg {
+  height: 100%;
+  width: 100%;
 }
