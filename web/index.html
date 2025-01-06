@@ -1,3 +1,4 @@
+<!-- filepath: /d:/Codes/Garbeggo/web/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,10 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Garbeggo</title>
   <link rel="stylesheet" href="./src/css/main.css" />
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
-  <header><img src="../assests/images/logo.png" alt="logo" /></header>
+  <header><img class="logo" src="/images/logo.png" alt="logo" /></header>
   <main>
     <div class="dustbin-container">
       <h2>List of filled Dustbins</h2>
@@ -17,14 +19,14 @@
       <hr />
       <h2>Empty Dustbins</h2>
       <button id="open-empty-dustbin-btn">
-        <img src="../assests/icons/rightArrow.svg" />
+        <img src="/images/rightArrow.svg" />
       </button>
       <ul class="unfilled hide"></ul>
     </div>
     <div class="map">
     </div>
   </main>
-  <script src="./src/js/home.js" type="module"></script>
+  <script type="module" src="./src/js/home.js"></script>
 </body>
 
 </html>
